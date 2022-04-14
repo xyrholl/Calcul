@@ -17,7 +17,7 @@ public class ApiConnect {
     public HttpEntity<String> requestCurrencyApi(){
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.ALL);
+        headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<?> requestMessage = new HttpEntity<>(headers);
         req_url += "&access_key="+ key;
         HttpEntity<String> response = restTemplate.postForEntity(req_url, requestMessage, String.class);
