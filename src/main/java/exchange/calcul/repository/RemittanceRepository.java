@@ -1,22 +1,13 @@
 package exchange.calcul.repository;
 
-import javax.persistence.EntityManager;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import exchange.calcul.domain.Remittance;
-import lombok.RequiredArgsConstructor;
+
 
 @Repository
-@RequiredArgsConstructor
-public class RemittanceRepository {
+public interface RemittanceRepository extends JpaRepository<Remittance, Integer> {
 
-    private final EntityManager em;
-
-    public void save(Remittance remittance){
-        em.persist(remittance);
-    }
-
-
-    
 }

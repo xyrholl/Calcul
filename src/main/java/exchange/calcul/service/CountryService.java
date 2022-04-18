@@ -6,6 +6,8 @@ import exchange.calcul.domain.Country;
 import exchange.calcul.repository.CountryRepository;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class CountryService {
@@ -17,8 +19,8 @@ public class CountryService {
         return country.getId();
     }
 
-    public Country countryFindOne(Country country){
-        return countryRepository.findOne(country);
+    public Optional countryFindOne(Country country){
+        return countryRepository.findById(country.getId());
     }
     
 }
