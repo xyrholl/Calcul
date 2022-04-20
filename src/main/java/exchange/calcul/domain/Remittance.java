@@ -45,6 +45,7 @@ public class Remittance {
          return this.currencyRate.getCurrencyRate()*this.remittancePrice;
      }
 
+     //== 엔티티 예외처리 ==//
      public void setRemittancePrice(Long remittancePrice){
          if(remittancePrice <= 0){
              throw new IllegalArgumentException("need more remittancePrice");
