@@ -4,11 +4,13 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 
 @Entity
 @Getter @Setter
+@DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CurrencyRate {
     /**
