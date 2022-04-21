@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>환율 계산</h1>
+<form role="form" action="/members/new" method="post">
+    <div class="form-group">
+        <label th:for="benchCountry">송금국가:</label>
+        <input type="text" th:field="benchCountry" class="form-control" value="미국(USD)" disabled="disabled">
+    </div>
+    <div class="form-group">
+        <label >수취국가:</label>
+        <select>
+            <option th:each="country : ${countries}"
+                    th:value="${country.currencyName}"
+                    th:text="${country.countryCurrencyName}"
+            />
+        </select>
+    </div>
+    <div class="form-group">
+        <label th:for="currencyRate">환율:</label>
+        <input type="text" th:field="currencyRate" class="form-control" disabled="disabled">
+    </div>
+    <div class="form-group">
+        <label th:for="receptionPrice">송금액:</label>
+        <input type="text" th:field="receptionPrice" class="form-control" placeholder="송금액을 입력하세요">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+</body>
+</html>
