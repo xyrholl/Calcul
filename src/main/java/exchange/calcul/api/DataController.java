@@ -1,6 +1,7 @@
 package exchange.calcul.api;
 
-import exchange.calcul.dto.ChangeCurrencyRate;
+import exchange.calcul.dto.CurrencyRateForm;
+import exchange.calcul.dto.RemittanceForm;
 import exchange.calcul.service.DataService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,8 +19,13 @@ public class DataController {
     private final DataService dataService;
 
     @PostMapping("/currencyRate")
-    public ChangeCurrencyRate currencyRate(@RequestBody ChangeCurrencyRate changeCurrency){
+    public CurrencyRateForm currencyRate(@RequestBody CurrencyRateForm changeCurrency){
         return dataService.reqCurrencyRate(changeCurrency);
+    }
+
+    @PostMapping("/remittance")
+    public RemittanceForm remittance(@RequestBody RemittanceForm form){
+        return dataService.reqRemittance(form);
     }
 
     @GetMapping("/currencyRateAll")

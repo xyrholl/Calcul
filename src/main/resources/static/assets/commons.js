@@ -13,3 +13,22 @@ function apiCon(method, url ,obj) {
     });
     return reObj;
 }
+
+function selectedValues(obj){
+    let selects = document.querySelectorAll("select");
+    selects.forEach(function(item){
+        obj[item.name] = item.value;
+    })
+    return obj;
+}
+
+function inputValues(obj){
+    let inputs = document.querySelectorAll("input");
+    inputs.forEach(function(item){
+        if(item.name){
+            let val = item.value;
+            obj[item.name] = val.trim();
+        }
+    })
+    return obj;
+}

@@ -9,5 +9,5 @@ import java.util.Optional;
 @Repository
 public interface CurrencyRateRepository extends JpaRepository<CurrencyRate, Long> {
 
-    public Optional<CurrencyRate> findTopByBenchCountryAndTransCountry(String benchCountry, String transCountry);
+    public Optional<CurrencyRate> findByBenchCountryAndTransCountry(String benchCountry, String transCountry);
 }

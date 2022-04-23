@@ -1,13 +1,15 @@
 package exchange.calcul.domain;
 
+import exchange.calcul.dto.RemittanceForm;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.function.Supplier;
 
 @Entity
-@Getter @Setter
+@Getter
 @DynamicInsert
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -28,10 +30,18 @@ public class CurrencyRate {
 
     public static CurrencyRate createCurrencyRate(String benchCountry, String transCountry, LocalDateTime apiReqTime, Double rate){
         CurrencyRate currencyRate = new CurrencyRate();
-        currencyRate.setBenchCountry(benchCountry);
-        currencyRate.setTransCountry(transCountry);
-        currencyRate.setApiReqTime(apiReqTime);
-        currencyRate.setRate(rate);
+        currencyRate.benchCountry = benchCountry;
+        currencyRate.transCountry =transCountry;
+        currencyRate.apiReqTime = apiReqTime;
+        currencyRate.rate = rate;
+        return currencyRate;
+    }
+
+    public static CurrencyRate createCurrencyRate(RemittanceForm form){
+        CurrencyRate currencyRate = new CurrencyRate();
+        currencyRate.benchCountry = form.getBenchCountry();
+        currencyRate.transCountry = form.getTransCountry();
+        currencyRate.rate = form.getRate();
         return currencyRate;
     }
 

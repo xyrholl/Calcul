@@ -1,21 +1,20 @@
 package exchange.calcul.dto;
 
-import exchange.calcul.domain.CurrencyRate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class ChangeCurrencyRate {
+public class CurrencyRateForm {
 
     private String benchCountry;
     private String transCountry;
-    private Double currencyRate;
+    private Double rate;
 
-    public ChangeCurrencyRate(CurrencyRate currencyRate){
+    public CurrencyRateForm(exchange.calcul.domain.CurrencyRate currencyRate){
         this.benchCountry = currencyRate.getBenchCountry();
         this.transCountry = currencyRate.getTransCountry();
-        this.currencyRate = currencyRate.getRate();
+        this.rate = currencyRate.getRate();
     }
 
 }
