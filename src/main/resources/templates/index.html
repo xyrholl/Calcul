@@ -1,19 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/layout}"
+>
+<th:block layout:fragment="content">
+<script th:inline="javascript">
+    $(document).ready(function (){
+
+
+
+    });
+
+    $(document).on("change", "#currencyName", function (e){
+        e.stopPropagation();
+        if($(this).val()){
+            let obj = new Object();
+            obj.benchCountry = $("#benchCountry").val();
+            obj.transCountry = $(this).val();
+            let result = apiCon("post", "/currencyRate", obj)
+            $("#currencyRate").val(result.currencyRate);
+            let text = " "+result.transCountry + "/"+ result.benchCountry;
+            $(".currencyRateText").text(text);
+        }
+
+    });
+
+
+</script>
+
 <h1>환율 계산</h1>
-<form role="form" action="/remittance" method="post">
+<form role="form" action="/remittance" th:objcet="${RemittanceForm}" method="post">
     <div>
         <label th:for="benchCountry">송금국가:</label>
-        <input type="text" name="benchCountry" id="benchCountry" value="미국(USD)" disabled="disabled">
+        <select name="benchCountry" id="benchCountry" readonly>
+            <option value="USD">미국(USD)</option>
+        </select>
     </div>
     <div>
-        <label >수취국가:</label>
+        <label th:for="currencyName" >수취국가:</label>
         <select name="currencyName" id="currencyName">
+            <option value="">선택</option>
             <option th:each="country: ${countries}"
                     th:value="${country.currencyName}"
                     th:text="${country.countryCurrencyName}"
@@ -22,7 +49,8 @@
     </div>
     <div>
         <label th:for="currencyRate">환율:</label>
-        <input type="text" disabled="disabled">
+        <input name="currencyRate" id="currencyRate" type="number" readonly>
+        <span class="currencyRateText"></span>
     </div>
     <div>
         <label th:for="receptionPrice">송금액:</label>
@@ -30,5 +58,6 @@
     </div>
     <button type="submit" >Submit</button>
 </form>
-</body>
+
+</th:block>
 </html>

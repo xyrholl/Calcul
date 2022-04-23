@@ -29,20 +29,15 @@ public class Remittance {
     private CurrencyRate currencyRate;
 
     private Long remittancePrice;
-    private float receptionPrice;
+    private Double receptionPrice;
 
     @ColumnDefault(value = "CURRENT_TIMESTAMP")
     private LocalDateTime requestTime;
 
-    //== 연관관계 메서드 ==//
-     public void setCurrencyRate(CurrencyRate currencyRate){
-         this.currencyRate = currencyRate;
-         currencyRate.setRemittance(this);
-     }
 
      //== 비즈니스 로직==//
-     public float getReceptionPrice(){
-         return this.currencyRate.getCurrencyRate()*this.remittancePrice;
+     public double getReceptionPrice(){
+         return this.currencyRate.getRate()*this.remittancePrice;
      }
 
      //== 엔티티 예외처리 ==//

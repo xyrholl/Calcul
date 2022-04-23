@@ -1,16 +1,15 @@
 package exchange.calcul.domain;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter
 @DynamicInsert
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CurrencyRate {
     /**
@@ -23,8 +22,17 @@ public class CurrencyRate {
     private String benchCountry;
     private String transCountry;
 
-    private float currencyRate;
+    private LocalDateTime apiReqTime;
 
-    @OneToOne(mappedBy = "currencyRate")
-    private Remittance remittance;
+    private Double rate;
+
+    public static CurrencyRate createCurrencyRate(String benchCountry, String transCountry, LocalDateTime apiReqTime, Double rate){
+        CurrencyRate currencyRate = new CurrencyRate();
+        currencyRate.setBenchCountry(benchCountry);
+        currencyRate.setTransCountry(transCountry);
+        currencyRate.setApiReqTime(apiReqTime);
+        currencyRate.setRate(rate);
+        return currencyRate;
+    }
+
 }
