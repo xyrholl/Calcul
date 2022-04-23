@@ -25,8 +25,9 @@
         let obj = new Object();
         obj = selectedValues(obj);
         obj = inputValues(obj);
+        console.log(obj)
         let result = apiCon("post", "/remittance", obj)
-        console.log(result)
+        console.log(result);
         $("#receptionPrice").val(result.receptionPrice);
     })
 
@@ -52,13 +53,14 @@
     </div>
     <div>
         <label for="rate">환율:</label>
-        <input name="rate" id="rate" type="number" readonly>
+        <input name="rate" id="rate" type="text" readonly>
         <span class="rateText"></span>
     </div>
     <div>
         <label for="remittancePrice">송금액:</label>
-        <input type="text" name="remittancePrice" id="remittancePrice" placeholder="송금액을 입력하세요">
+        <input type="number" name="remittancePrice" id="remittancePrice" placeholder="송금액을 입력하세요">
         <span>USD</span>
+        <div class="remittanceError"></div>
     </div>
     <button type="button" id="remittance" name="remittance">Submit</button>
 

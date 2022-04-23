@@ -41,7 +41,7 @@ public class CurrencyRate {
         CurrencyRate currencyRate = new CurrencyRate();
         currencyRate.benchCountry = form.getBenchCountry();
         currencyRate.transCountry = form.getTransCountry();
-        currencyRate.rate = form.getRate();
+        currencyRate.rate = Double.valueOf(form.getRate());
         return currencyRate;
     }
 

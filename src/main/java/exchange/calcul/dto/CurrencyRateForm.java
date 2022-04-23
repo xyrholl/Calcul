@@ -1,7 +1,10 @@
 package exchange.calcul.dto;
 
+import exchange.calcul.domain.CurrencyRate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+
+import static exchange.calcul.util.CurrencyUtil.roundTwo;
 
 @Data
 @AllArgsConstructor
@@ -9,12 +12,12 @@ public class CurrencyRateForm {
 
     private String benchCountry;
     private String transCountry;
-    private Double rate;
+    private String rate;
 
-    public CurrencyRateForm(exchange.calcul.domain.CurrencyRate currencyRate){
+    public CurrencyRateForm(CurrencyRate currencyRate){
         this.benchCountry = currencyRate.getBenchCountry();
         this.transCountry = currencyRate.getTransCountry();
-        this.rate = currencyRate.getRate();
+        this.rate = roundTwo(currencyRate.getRate());
     }
 
 }

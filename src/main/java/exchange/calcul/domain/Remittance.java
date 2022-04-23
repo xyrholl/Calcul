@@ -12,6 +12,8 @@ import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
+import static exchange.calcul.util.CurrencyUtil.roundTwo;
+
 @Entity
 @Getter
 @DynamicInsert
@@ -37,7 +39,7 @@ public class Remittance {
 
     public static Remittance createRemittance(RemittanceForm form, CurrencyRate currencyRate){
         Remittance remittance = new Remittance();
-        remittance.setRemittancePrice(form.getRemittancePrice());
+        remittance.setRemittancePrice(Double.valueOf(form.getRemittancePrice()));
         remittance.currencyRate = currencyRate;
         remittance.setReceptionPrice();
         return remittance;

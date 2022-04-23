@@ -52,8 +52,7 @@ public class DataService {
             JsonNode quotes = apiData.get("quotes");
             LocalDateTime time = LocalDateTime.now();
 
-            Map<String, Object> map = objectMapper.convertValue(quotes, new TypeReference<>() {
-            });
+            Map<String, Object> map = objectMapper.convertValue(quotes, new TypeReference<>() {});
             List<exchange.calcul.domain.CurrencyRate> list = new ArrayList<>();
             map.forEach((key, value) -> list.add(
                     exchange.calcul.domain.CurrencyRate.createCurrencyRate(
