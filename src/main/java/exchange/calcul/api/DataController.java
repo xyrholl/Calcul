@@ -31,9 +31,4 @@ public class DataController {
         return new ModelMap(dataService.CurrencyRateAll());
     }
 
-    @GetMapping("/dataSave")
-    public void dataSave(){
-        dataService.rateDataSave();
-    }
-
 }

@@ -33,27 +33,54 @@ public class DataService {
     private final RemittanceRepository remittanceRepository;
     private final ApiConnect apiConnect;
 
-    public CurrencyRateForm reqCurrencyRate(CurrencyRateForm changeCurrency){
+    public CurrencyRateForm reqCurrencyRate(CurrencyRateForm currencyRateForm){
         // 데이터 검색 후 없으면 api 요청
-        Optional<CurrencyRate> currencyRate = currencyRateRepository.findByBenchCountryAndTransCountry(changeCurrency.getBenchCountry(), changeCurrency.getTransCountry());               ;
-//                        .orElseThrow(()->
-//                        new EntityNotFoundException()
-//                ));
+        Optional<CurrencyRate> currencyRate = Optional.ofNullable(currencyRateRepository
+                .findByBenchCountryAndTransCountry(currencyRateForm.getBenchCountry(), currencyRateForm.getTransCountry())
+                .orElseGet(() -> apiData(apiConnect.requestCurrencyApi(), currencyRateForm)));
         return new CurrencyRateForm(currencyRate.get());
     }
 
-    @Transactional
-    public void rateDataSave(){
-        HttpEntity<String> response = apiConnect.requestCurrencyApi();
-        List<CurrencyRate> list = apiConnect.apiDataParse(response);
-        if(list != null){
-            currencyRateRepository.saveAll(list);
+    public CurrencyRate apiData(HttpEntity<String> response, CurrencyRateForm currencyRateForm){
+        List<CurrencyRate> list = new ArrayList<>();
+
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            Map<String, Object> map =  objectMapper.readValue(response.getBody(), new TypeReference<>() {});
+            if(String.valueOf(map.get("success")).equals("true")){
+                Map<String, Object> quotesMap = objectMapper.convertValue(map.get("quotes"), new TypeReference<>() {});
+                String benchCountry = String.valueOf(map.get("source"));
+
+                quotesMap.forEach((key, value) -> list.add(
+                        CurrencyRate.createCurrencyRate(
+                                benchCountry,
+                                key.replace(benchCountry, ""),
+                                LocalDateTime.now(),
+                                (Double) value
+                        ))
+                );
+
+                return CurrencyRate.createCurrencyRate(
+                        benchCountry,
+                        currencyRateForm.getTransCountry(),
+                        LocalDateTime.now(),
+                        (Double)quotesMap.get(benchCountry+currencyRateForm.getTransCountry())
+                );
+
+            }else{
+                throw new RuntimeException("외부 API 호출에 실패하였습니다.");
+            }
+        }catch (JsonProcessingException e){
+            e.printStackTrace();
+            return null;
+        }finally {
+            currencyRateSave(list);
         }
     }
 
-    public CurrencyRate currencyRateSave(CurrencyRateForm changeCurrency) {
-        rateDataSave();
-        return currencyRateRepository.findByBenchCountryAndTransCountry(changeCurrency.getBenchCountry(), changeCurrency.getTransCountry()).get();
+    @Transactional
+    public void currencyRateSave(List<CurrencyRate> list){
+        currencyRateRepository.saveAll(list);
     }
 
     public RemittanceForm reqRemittance(RemittanceForm form) {
