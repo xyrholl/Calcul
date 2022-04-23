@@ -5,6 +5,12 @@
         layout:decorate="~{layouts/layout}"
 >
 <th:block layout:fragment="content">
+<style>
+    .remittanceError{
+        color: red;
+    }
+</style>
+
 <script th:inline="javascript">
     $(document).on("change", "#transCountry", function (e){
         e.stopPropagation();
@@ -28,8 +34,9 @@
         let result = apiCon("post", "/remittance", obj)
         if(!result.hasOwnProperty("responseText")){
             $("#receptionPrice").val(result.receptionPrice);
+            $(".remittanceError").text("");
         }else{
-            let error = JSON.parse(result.responseText);
+            let error = result.responseText;
             $(".remittanceError").text(error.message);
         }
     })

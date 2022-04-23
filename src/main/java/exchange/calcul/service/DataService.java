@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -41,43 +42,18 @@ public class DataService {
         return new CurrencyRateForm(currencyRate.get());
     }
 
+    @Transactional
     public void rateDataSave(){
-        HttpEntity<String> str = apiConnect.requestCurrencyApi();
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        try {
-
-            JsonNode apiData = objectMapper.readTree(str.getBody());
-            String benchCountry = apiData.get("source").asText();
-            JsonNode quotes = apiData.get("quotes");
-            LocalDateTime time = LocalDateTime.now();
-
-            Map<String, Object> map = objectMapper.convertValue(quotes, new TypeReference<>() {});
-            List<exchange.calcul.domain.CurrencyRate> list = new ArrayList<>();
-            map.forEach((key, value) -> list.add(
-                    CurrencyRate.createCurrencyRate(
-                            benchCountry,
-                            key.replace(benchCountry, ""),
-                            time,
-                            (Double) value
-                    ))
-            );
+        HttpEntity<String> response = apiConnect.requestCurrencyApi();
+        List<CurrencyRate> list = apiConnect.apiDataParse(response);
+        if(list != null){
             currencyRateRepository.saveAll(list);
-
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
         }
     }
 
-    public exchange.calcul.domain.CurrencyRate currencyRateSave(CurrencyRateForm changeCurrency) {
+    public CurrencyRate currencyRateSave(CurrencyRateForm changeCurrency) {
         rateDataSave();
         return currencyRateRepository.findByBenchCountryAndTransCountry(changeCurrency.getBenchCountry(), changeCurrency.getTransCountry()).get();
-    }
-
-
-    public List<CurrencyRateForm> CurrencyRateAll() {
-        List<CurrencyRateForm> collect = currencyRateRepository.findAll().stream().map(CurrencyRateForm::new).collect(Collectors.toList());
-        return collect;
     }
 
     public RemittanceForm reqRemittance(RemittanceForm form) {
@@ -86,4 +62,11 @@ public class DataService {
         remittanceRepository.save(newRemittance);
         return new RemittanceForm(newRemittance);
     }
+
+    public List<CurrencyRateForm> CurrencyRateAll() {
+        List<CurrencyRateForm> collect = currencyRateRepository.findAll().stream().map(CurrencyRateForm::new).collect(Collectors.toList());
+        return collect;
+    }
+
+
 }

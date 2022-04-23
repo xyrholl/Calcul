@@ -23,7 +23,9 @@ public class ApiControllerAdvice {
     @ExceptionHandler
     public ResponseEntity<ErrorResult> exceptionHandler(Exception e){
         log.error("[exceptionHandler] INTERNAL_SERVER_ERROR", e);
-        ErrorResult errorResult = new ErrorResult(false,e.getMessage());
+        ErrorResult errorResult = new ErrorResult(
+                false,
+                e.getMessage());
         return  new ResponseEntity<>(errorResult, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

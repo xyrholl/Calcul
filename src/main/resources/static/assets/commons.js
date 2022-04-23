@@ -11,7 +11,7 @@ function apiCon(method, url ,obj) {
             reObj = result;
         },
         error : function(request){
-            reObj.responseText = request.responseText;
+            reObj.responseText = JSON.parse(request.responseText);
         },
     });
     return reObj;
