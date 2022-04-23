@@ -55,7 +55,7 @@ public class DataService {
             Map<String, Object> map = objectMapper.convertValue(quotes, new TypeReference<>() {});
             List<exchange.calcul.domain.CurrencyRate> list = new ArrayList<>();
             map.forEach((key, value) -> list.add(
-                    exchange.calcul.domain.CurrencyRate.createCurrencyRate(
+                    CurrencyRate.createCurrencyRate(
                             benchCountry,
                             key.replace(benchCountry, ""),
                             time,

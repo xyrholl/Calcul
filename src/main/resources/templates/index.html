@@ -25,10 +25,13 @@
         let obj = new Object();
         obj = selectedValues(obj);
         obj = inputValues(obj);
-        console.log(obj)
         let result = apiCon("post", "/remittance", obj)
-        console.log(result);
-        $("#receptionPrice").val(result.receptionPrice);
+        if(!result.hasOwnProperty("responseText")){
+            $("#receptionPrice").val(result.receptionPrice);
+        }else{
+            let error = JSON.parse(result.responseText);
+            $(".remittanceError").text(error.message);
+        }
     })
 
 </script>

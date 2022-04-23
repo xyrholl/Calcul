@@ -2,14 +2,16 @@ package exchange.calcul.api;
 
 import exchange.calcul.dto.CurrencyRateForm;
 import exchange.calcul.dto.RemittanceForm;
+import exchange.calcul.exception.ErrorResult;
 import exchange.calcul.service.DataService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -24,7 +26,7 @@ public class DataController {
     }
 
     @PostMapping("/remittance")
-    public RemittanceForm remittance(@RequestBody RemittanceForm form){
+    public RemittanceForm remittance(@Validated @RequestBody RemittanceForm form){
         return dataService.reqRemittance(form);
     }
 

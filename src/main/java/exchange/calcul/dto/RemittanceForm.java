@@ -17,8 +17,8 @@ public class RemittanceForm {
     private String benchCountry;
     private String transCountry;
     private String rate;
-    @NotNull
-    @Range(min = 10, max = 10000)
+    @NotNull(message = "송금액이 바르지 않습니다.")
+    @Range(min = 10, max = 10000, message = "송금액이 바르지 않습니다.")
     private String remittancePrice;
     private String receptionPrice;
 

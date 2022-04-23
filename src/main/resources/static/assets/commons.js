@@ -9,7 +9,10 @@ function apiCon(method, url ,obj) {
         async: false,
         success: function (result) {
             reObj = result;
-        }
+        },
+        error : function(request){
+            reObj.responseText = request.responseText;
+        },
     });
     return reObj;
 }
