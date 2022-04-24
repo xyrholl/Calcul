@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.hibernate.validator.constraints.Range;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import static exchange.calcul.util.CurrencyUtil.roundTwo;
@@ -14,7 +15,9 @@ import static exchange.calcul.util.CurrencyUtil.roundTwo;
 @AllArgsConstructor
 public class RemittanceForm {
 
+    @NotEmpty(message = "송금국가가 바르지 않습니다.")
     private String benchCountry;
+    @NotEmpty(message = "수취국가가 바르지 않습니다.")
     private String transCountry;
     private String rate;
     @NotNull(message = "송금액이 바르지 않습니다.")

@@ -6,9 +6,17 @@
 >
 <th:block layout:fragment="content">
 <style>
+    div{
+        margin-bottom: 5px;
+    }
     .remittanceError{
         color: red;
     }
+    .receptionPrice{
+        display: none;
+        margin-top: 5px;
+    }
+
 </style>
 
 <script th:inline="javascript">
@@ -22,7 +30,6 @@
             let text = " "+result.transCountry + "/"+ result.benchCountry;
             $(".rateText").text(text);
             $("#receptionPrice").val("");
-            $(".remittanceText").text(result.transCountry);
         }
     });
 
@@ -33,11 +40,15 @@
         obj = inputValues(obj);
         let result = apiCon("post", "/remittance", obj)
         if(!result.hasOwnProperty("responseText")){
-            $("#receptionPrice").val(result.receptionPrice);
+            $("#rate").val(result.rate);
+            $("#receptionPrice").text(result.receptionPrice);
+            $(".receptionText").text(result.transCountry);
+            $(".receptionPrice").css("display", "block")
             $(".remittanceError").text("");
         }else{
             let error = result.responseText;
             $(".remittanceError").text(error.message);
+            $(".receptionPrice").css("display", "none")
         }
     })
 
@@ -51,6 +62,7 @@
             <option value="USD">미국(USD)</option>
         </select>
     </div>
+
     <div>
         <label for="transCountry" >수취국가:</label>
         <select name="transCountry" id="transCountry">
@@ -61,23 +73,28 @@
             />
         </select>
     </div>
+
     <div>
         <label for="rate">환율:</label>
         <input name="rate" id="rate" type="text" readonly>
         <span class="rateText"></span>
     </div>
+
     <div>
         <label for="remittancePrice">송금액:</label>
         <input type="number" name="remittancePrice" id="remittancePrice" placeholder="송금액을 입력하세요">
         <span>USD</span>
         <div class="remittanceError"></div>
     </div>
-    <button type="button" id="remittance" name="remittance">Submit</button>
-
     <div>
-        <label for="remittancePrice">수취금:</label>
-        <input type="text" name="receptionPrice" id="receptionPrice" readonly>
-        <span class="remittanceText"></span>
+        <button type="button" id="remittance" name="remittance">Submit</button>
+    </div>
+
+    <div class="receptionPrice">
+        <span>수취금액은 </span>
+        <span name="receptionPrice" id="receptionPrice"></span>
+        <span class="receptionText"></span>
+        <span> 입니다.</span>
     </div>
 
 

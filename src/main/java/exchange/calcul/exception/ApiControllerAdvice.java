@@ -12,6 +12,15 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ApiControllerAdvice {
 
     @ExceptionHandler
+    public ResponseEntity<ErrorResult> nullHandler(NullPointerException e){
+        log.error("[exceptionHandler] BAD_REQUEST", e);
+        ErrorResult errorResult = new ErrorResult(
+                false,
+                e.getMessage());
+        return new ResponseEntity<>(errorResult, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
     public ResponseEntity<ErrorResult> validHandler(MethodArgumentNotValidException e){
         log.error("[exceptionHandler] BAD_REQUEST", e);
         ErrorResult errorResult = new ErrorResult(

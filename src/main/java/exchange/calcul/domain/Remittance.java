@@ -8,11 +8,8 @@ import exchange.calcul.dto.RemittanceForm;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
-
-import static exchange.calcul.util.CurrencyUtil.roundTwo;
 
 @Entity
 @Getter
@@ -20,7 +17,7 @@ import static exchange.calcul.util.CurrencyUtil.roundTwo;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Remittance {
     /**
-     * 송금 영수 엔티티
+     * 송금 영수증 엔티티
      * 숭금 submit 후에 insert 되는 엔티티
      */
     @Id @GeneratedValue
@@ -53,7 +50,7 @@ public class Remittance {
      //== 엔티티 예외처리 ==//
      public void setRemittancePrice(Double remittancePrice){
          if(remittancePrice <= 0){
-             throw new RuntimeException("need more remittancePrice");
+             throw new RuntimeException("송금액이 0이하 입니다.");
          }
          this.remittancePrice =  remittancePrice;
      }

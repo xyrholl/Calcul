@@ -6,12 +6,10 @@ import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.function.Supplier;
 
 @Entity
 @Getter
 @DynamicInsert
-@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CurrencyRate {
     /**

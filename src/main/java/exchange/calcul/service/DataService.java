@@ -38,8 +38,6 @@ public class DataService {
     }
 
     public CurrencyRate reqCurrencyRate(CurrencyRateForm currencyRateForm){
-        // 쿼리조건 1시간 내, 최근 1개 추가 해야함
-        // 데이터 검색 후 없으면 api 요청
         LocalDateTime beforeOneHour = LocalDateTime.now().minusHours(1);
         Optional<CurrencyRate> currencyRate = Optional.ofNullable(currencyRateRepository
                 .findTopByBenchCountryAndTransCountryAndApiReqTimeAfterOrderByApiReqTimeDesc(currencyRateForm.getBenchCountry(), currencyRateForm.getTransCountry(), beforeOneHour)
