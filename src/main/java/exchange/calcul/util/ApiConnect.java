@@ -1,26 +1,62 @@
 package exchange.calcul.util;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import exchange.calcul.domain.CurrencyRate;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.stereotype.Component;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-@Component
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Service
 public class ApiConnect {
 
-    @Value("${evn.accesskey}")
+    private final RestTemplate restTemplate;
+
+    public ApiConnect(RestTemplateBuilder restTemplateBuilder) {
+        restTemplate = restTemplateBuilder.build();
+    }
+
+    @Value("${evn.accessKey}")
     private String key;
     private String req_url = "http://apilayer.net/api/live?currencies=KRW,JPY,PHP,&source=USD&format=1";
 
-    public HttpEntity<String> requestCurrencyApi(){
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<?> requestMessage = new HttpEntity<>(headers);
+    public HashMap requestCurrencyApi(){
         req_url += "&access_key="+ key;
-        return restTemplate.postForEntity(req_url, requestMessage, String.class);
+        return restTemplate.getForObject(req_url, HashMap.class);
+    }
+
+    public List<CurrencyRate> currencyRatesExtraction(HashMap hashMapData){
+
+        List<CurrencyRate> list = new ArrayList<>();
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, Object> quotesMap;
+
+        if(String.valueOf(hashMapData.get("success")).equals("true")) {
+            String benchCountry = String.valueOf(hashMapData.get("source"));
+
+            quotesMap = objectMapper
+                    .convertValue(hashMapData.get("quotes"), new TypeReference<>(){});
+
+            quotesMap.forEach((key, value) -> list.add(
+                    CurrencyRate.createCurrencyRate(
+                            benchCountry,
+                            key.replace(benchCountry, ""),
+                            LocalDateTime.now(),
+                            (Double) value
+                    ))
+            );
+
+            return list;
+        }else{
+            throw new RuntimeException("외부 API 호출에 실패하였습니다.");
+        }
     }
 
 }

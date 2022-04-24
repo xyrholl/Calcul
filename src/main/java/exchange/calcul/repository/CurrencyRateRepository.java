@@ -9,4 +9,6 @@ import java.util.Optional;
 public interface CurrencyRateRepository extends JpaRepository<CurrencyRate, Long> {
 
     Optional<CurrencyRate> findTopByBenchCountryAndTransCountryAndApiReqTimeAfterOrderByApiReqTimeDesc(String benchCountry, String transCountry, LocalDateTime beforeOneHour);
+
+    CurrencyRate findTopByBenchCountryAndTransCountryOrderByApiReqTimeDesc(String benchCountry, String transCountry);
 }
