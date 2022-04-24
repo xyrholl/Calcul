@@ -56,9 +56,6 @@ public class DataService {
     }
 
     public void currencyRateSave(List<CurrencyRate> list){
-        if(list.isEmpty()){
-            list = apiConnect.currencyRatesExtraction(apiConnect.requestCurrencyApi());
-        }
         currencyRateRepository.saveAllAndFlush(list);
     }
 

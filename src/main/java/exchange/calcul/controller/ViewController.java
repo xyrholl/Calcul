@@ -1,17 +1,14 @@
 package exchange.calcul.controller;
 
 import exchange.calcul.dto.CountryDto;
-import exchange.calcul.dto.RemittanceForm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
-@Slf4j
 @Controller
 public class ViewController {
 
