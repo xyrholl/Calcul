@@ -2,7 +2,6 @@ package exchange.calcul.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import exchange.calcul.domain.CurrencyRate;
 import exchange.calcul.domain.Remittance;
@@ -26,6 +25,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class DataService {
 
@@ -33,12 +33,22 @@ public class DataService {
     private final RemittanceRepository remittanceRepository;
     private final ApiConnect apiConnect;
 
-    public CurrencyRateForm reqCurrencyRate(CurrencyRateForm currencyRateForm){
+    public CurrencyRateForm reqCurrencyRateForm(CurrencyRateForm currencyRateForm){
+        return  new CurrencyRateForm(reqCurrencyRate(currencyRateForm));
+    }
+
+    public CurrencyRate reqCurrencyRate(CurrencyRateForm currencyRateForm){
+        // 쿼리조건 1시간 내, 최근 1개 추가 해야함
         // 데이터 검색 후 없으면 api 요청
+        LocalDateTime beforeOneHour = LocalDateTime.now().minusHours(1);
         Optional<CurrencyRate> currencyRate = Optional.ofNullable(currencyRateRepository
-                .findByBenchCountryAndTransCountry(currencyRateForm.getBenchCountry(), currencyRateForm.getTransCountry())
+                .findTopByBenchCountryAndTransCountryAndApiReqTimeAfterOrderByApiReqTimeDesc(currencyRateForm.getBenchCountry(), currencyRateForm.getTransCountry(), beforeOneHour)
                 .orElseGet(() -> apiData(apiConnect.requestCurrencyApi(), currencyRateForm)));
-        return new CurrencyRateForm(currencyRate.get());
+        if(currencyRate.isPresent()){
+            return currencyRate.get();
+        }else{
+            throw new RuntimeException("외부 API 호출에 실패하였습니다.");
+        }
     }
 
     public CurrencyRate apiData(HttpEntity<String> response, CurrencyRateForm currencyRateForm){
@@ -78,21 +88,19 @@ public class DataService {
         }
     }
 
-    @Transactional
     public void currencyRateSave(List<CurrencyRate> list){
-        currencyRateRepository.saveAll(list);
+        currencyRateRepository.saveAllAndFlush(list);
     }
 
     public RemittanceForm reqRemittance(RemittanceForm form) {
-        Optional<CurrencyRate> currencyRate = currencyRateRepository.findByBenchCountryAndTransCountry(form.getBenchCountry(), form.getTransCountry());
-        Remittance newRemittance = Remittance.createRemittance(form, currencyRate.get());
-        remittanceRepository.save(newRemittance);
+        CurrencyRate currencyRate = reqCurrencyRate(new CurrencyRateForm(form));
+        Remittance newRemittance = Remittance.createRemittance(form, currencyRate);
+        remittanceRepository.saveAndFlush(newRemittance);
         return new RemittanceForm(newRemittance);
     }
 
     public List<CurrencyRateForm> CurrencyRateAll() {
-        List<CurrencyRateForm> collect = currencyRateRepository.findAll().stream().map(CurrencyRateForm::new).collect(Collectors.toList());
-        return collect;
+        return currencyRateRepository.findAll().stream().map(CurrencyRateForm::new).collect(Collectors.toList());
     }
 
 

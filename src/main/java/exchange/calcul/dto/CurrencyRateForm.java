@@ -20,4 +20,11 @@ public class CurrencyRateForm {
         this.rate = roundTwo(currencyRate.getRate());
     }
 
+    public CurrencyRateForm(RemittanceForm form){
+        this.benchCountry = form.getBenchCountry();
+        this.transCountry = form.getTransCountry();
+        this.rate = form.getRate();
+    }
+
+
 }

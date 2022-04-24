@@ -3,9 +3,10 @@ package exchange.calcul.repository;
 import exchange.calcul.domain.CurrencyRate;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 public interface CurrencyRateRepository extends JpaRepository<CurrencyRate, Long> {
 
-    Optional<CurrencyRate> findByBenchCountryAndTransCountry(String benchCountry, String transCountry);
+    Optional<CurrencyRate> findTopByBenchCountryAndTransCountryAndApiReqTimeAfterOrderByApiReqTimeDesc(String benchCountry, String transCountry, LocalDateTime beforeOneHour);
 }

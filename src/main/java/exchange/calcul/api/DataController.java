@@ -18,7 +18,7 @@ public class DataController {
 
     @PostMapping("/currencyRate")
     public CurrencyRateForm currencyRate(@RequestBody CurrencyRateForm changeCurrency){
-        return dataService.reqCurrencyRate(changeCurrency);
+        return dataService.reqCurrencyRateForm(changeCurrency);
     }
 
     @PostMapping("/remittance")
