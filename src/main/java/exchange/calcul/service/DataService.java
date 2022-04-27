@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -20,7 +19,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DataService {
 
-    private final CurrencyRateRepository currencyRateRepository;
     private final RemittanceRepository remittanceRepository;
     private final ApiConnect apiConnect;
 
@@ -40,14 +38,10 @@ public class DataService {
                 ).collect(Collectors.toList()).get(0);
     }
 
-    public void currencyRateSave(List<CurrencyRate> list){
-        currencyRateRepository.saveAllAndFlush(list);
-    }
-
+    @Transactional
     public RemittanceForm reqRemittance(RemittanceForm form) {
         CurrencyRate currencyRate = CurrencyRate.createCurrencyRate(form);
         Remittance newRemittance = Remittance.createRemittance(form, currencyRate);
-        currencyRateRepository.save(currencyRate);
         remittanceRepository.save(newRemittance);
         return new RemittanceForm(newRemittance);
     }

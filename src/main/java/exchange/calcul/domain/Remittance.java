@@ -24,7 +24,7 @@ public class Remittance {
     @Column(name = "remittance_id")
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "currency_rate_id")
     private CurrencyRate currencyRate;
 

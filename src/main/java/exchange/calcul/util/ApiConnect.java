@@ -48,7 +48,6 @@ public class ApiConnect {
                     CurrencyRate.createCurrencyRate(
                             benchCountry,
                             key.replace(benchCountry, ""),
-                            LocalDateTime.now(),
                             (Double) value
                     ))
             );

@@ -1,10 +1,12 @@
 package exchange.calcul.domain;
 
 import exchange.calcul.dto.RemittanceForm;
+import exchange.calcul.util.CurrencyUtil;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -23,15 +25,15 @@ public class CurrencyRate {
     private String benchCountry;
     private String transCountry;
 
-    private LocalDateTime apiReqTime;
-
     private Double rate;
 
-    public static CurrencyRate createCurrencyRate(String benchCountry, String transCountry, LocalDateTime apiReqTime, Double rate){
+    @OneToOne(mappedBy = "currencyRate")
+    private Remittance remittance;
+
+    public static CurrencyRate createCurrencyRate(String benchCountry, String transCountry, Double rate){
         CurrencyRate currencyRate = new CurrencyRate();
         currencyRate.benchCountry = benchCountry;
         currencyRate.transCountry =transCountry;
-        currencyRate.apiReqTime = apiReqTime;
         currencyRate.rate = rate;
         return currencyRate;
     }
@@ -40,7 +42,7 @@ public class CurrencyRate {
         CurrencyRate currencyRate = new CurrencyRate();
         currencyRate.benchCountry = form.getBenchCountry();
         currencyRate.transCountry = form.getTransCountry();
-        currencyRate.rate = Double.valueOf(form.getRate());
+        currencyRate.rate = CurrencyUtil.StringToNumber(form.getRate());
         return currencyRate;
     }
 
