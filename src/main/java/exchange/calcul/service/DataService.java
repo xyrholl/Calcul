@@ -4,7 +4,6 @@ import exchange.calcul.domain.CurrencyRate;
 import exchange.calcul.domain.Remittance;
 import exchange.calcul.dto.CurrencyRateForm;
 import exchange.calcul.dto.RemittanceForm;
-import exchange.calcul.repository.CurrencyRateRepository;
 import exchange.calcul.repository.RemittanceRepository;
 import exchange.calcul.util.ApiConnect;
 import lombok.RequiredArgsConstructor;
