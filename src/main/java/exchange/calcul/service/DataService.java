@@ -29,26 +29,11 @@ public class DataService {
     }
 
     public CurrencyRate reqCurrencyRate(CurrencyRateForm currencyRateForm){
-        LocalDateTime beforeOneHour = LocalDateTime.now().minusHours(1);
-
-        Optional<CurrencyRate> currencyRate = Optional.ofNullable(currencyRateRepository
-                .findTopByBenchCountryAndTransCountryAndApiReqTimeAfterOrderByApiReqTimeDesc(
-                        currencyRateForm.getBenchCountry(), currencyRateForm.getTransCountry(), beforeOneHour
-                )
-                .orElseGet(() -> findOneCurrencyRate(
-                        apiConnect.currencyRatesExtraction(apiConnect.requestCurrencyApi()), currencyRateForm)
-                )
-        );
-
-        if(currencyRate.isPresent()){
-            return currencyRate.get();
-        }else{
-            throw new RuntimeException("외부 API 호출에 실패하였습니다.");
-        }
+        List<CurrencyRate> CurrencyRates = apiConnect.currencyRatesExtraction(apiConnect.requestCurrencyApi());
+        return findOneCurrencyRate(CurrencyRates, currencyRateForm);
     }
 
     public CurrencyRate findOneCurrencyRate(List<CurrencyRate> crList, CurrencyRateForm currencyRateForm){
-        currencyRateSave(crList);
         return crList.stream()
                 .filter(cr -> cr.getBenchCountry().equals(currencyRateForm.getBenchCountry())
                         && cr.getTransCountry().equals(currencyRateForm.getTransCountry())
@@ -60,13 +45,9 @@ public class DataService {
     }
 
     public RemittanceForm reqRemittance(RemittanceForm form) {
-
-        CurrencyRate currencyRate = currencyRateRepository.findTopByBenchCountryAndTransCountryOrderByApiReqTimeDesc(
-                form.getBenchCountry(),
-                form.getTransCountry()
-        );
-
+        CurrencyRate currencyRate = CurrencyRate.createCurrencyRate(form);
         Remittance newRemittance = Remittance.createRemittance(form, currencyRate);
+        currencyRateRepository.save(currencyRate);
         remittanceRepository.save(newRemittance);
         return new RemittanceForm(newRemittance);
     }
