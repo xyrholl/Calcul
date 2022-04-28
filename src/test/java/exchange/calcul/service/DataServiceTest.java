@@ -1,26 +1,17 @@
 package exchange.calcul.service;
 
 import exchange.calcul.dao.jpa.CurrencyRateRepository;
-import exchange.calcul.domain.CurrencyRate;
-import exchange.calcul.domain.Remittance;
-import exchange.calcul.dto.CurrencyRateForm;
-import exchange.calcul.dto.RemittanceForm;
 import exchange.calcul.dao.jpa.RemittanceRepository;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.List;
-import java.util.Optional;
 
 @SpringBootTest
 class DataServiceTest {
 
     @Autowired private CurrencyRateRepository currencyRateRepository;
     @Autowired private RemittanceRepository remittanceRepository;
-    @Autowired private DataService dataService;
-    @Autowired private exchangeCompo exchangeCompo;
+    @Autowired private RemittanceService remittanceService;
+    @Autowired private ExchangeRateService ExchangeRateService;
 
 //    @Test
 //    void api데이터_DB저장데이터_동일() {

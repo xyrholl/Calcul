@@ -1,4 +1,4 @@
-package exchange.calcul.api.exception;
+package exchange.calcul.api;
 
 import exchange.calcul.dto.ErrorResult;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @Slf4j
 @RestControllerAdvice(basePackages = "exchange.calcul.api")
-public class ApiControllerAdvice {
+public class ExceptionApi {
 
     @ExceptionHandler
     public ResponseEntity<ErrorResult> validHandler(MethodArgumentNotValidException e){

@@ -14,11 +14,11 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class exchangeCompo {
+public class ExchangeRateService {
 
     private final RestTemplate restTemplate;
 
-    public exchangeCompo(RestTemplateBuilder restTemplateBuilder) {
+    public ExchangeRateService(RestTemplateBuilder restTemplateBuilder) {
         restTemplate = restTemplateBuilder.build();
     }
 
