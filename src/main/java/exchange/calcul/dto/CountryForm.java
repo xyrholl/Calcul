@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class CountryDto {
+public class CountryForm {
 
     private String countryName;
     private String currencyName;
