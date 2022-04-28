@@ -9,7 +9,7 @@ import org.hibernate.validator.constraints.Range;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import static exchange.calcul.util.CurrencyUtil.roundTwo;
+import static exchange.calcul.dto.util.CurrencyUtil.roundTwo;
 
 @Data
 @AllArgsConstructor

@@ -1,13 +1,11 @@
 package exchange.calcul.domain;
 
 import exchange.calcul.dto.RemittanceForm;
-import exchange.calcul.util.CurrencyUtil;
+import exchange.calcul.dto.util.CurrencyUtil;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
-import java.text.DecimalFormat;
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity

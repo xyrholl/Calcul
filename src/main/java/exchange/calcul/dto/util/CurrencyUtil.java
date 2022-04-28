@@ -1,4 +1,4 @@
-package exchange.calcul.util;
+package exchange.calcul.dto.util;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;

@@ -4,8 +4,7 @@ import exchange.calcul.domain.CurrencyRate;
 import exchange.calcul.domain.Remittance;
 import exchange.calcul.dto.CurrencyRateForm;
 import exchange.calcul.dto.RemittanceForm;
-import exchange.calcul.repository.RemittanceRepository;
-import exchange.calcul.util.ApiConnect;
+import exchange.calcul.dao.jpa.RemittanceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,14 +18,14 @@ import java.util.stream.Collectors;
 public class DataService {
 
     private final RemittanceRepository remittanceRepository;
-    private final ApiConnect apiConnect;
+    private final exchangeCompo exchangeCompo;
 
     public CurrencyRateForm reqCurrencyRateForm(CurrencyRateForm currencyRateForm){
         return  new CurrencyRateForm(reqCurrencyRate(currencyRateForm));
     }
 
     public CurrencyRate reqCurrencyRate(CurrencyRateForm currencyRateForm){
-        List<CurrencyRate> CurrencyRates = apiConnect.currencyRatesExtraction(apiConnect.requestCurrencyApi());
+        List<CurrencyRate> CurrencyRates = exchangeCompo.currencyRatesExtraction(exchangeCompo.requestCurrencyApi());
         return findOneCurrencyRate(CurrencyRates, currencyRateForm);
     }
 

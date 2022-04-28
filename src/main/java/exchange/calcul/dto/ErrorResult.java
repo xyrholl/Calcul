@@ -1,4 +1,4 @@
-package exchange.calcul.exception;
+package exchange.calcul.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,11 +1,11 @@
-package exchange.calcul.util;
+package exchange.calcul.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import exchange.calcul.domain.CurrencyRate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -13,12 +13,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Service
-public class ApiConnect {
+@Component
+public class exchangeCompo {
 
     private final RestTemplate restTemplate;
 
-    public ApiConnect(RestTemplateBuilder restTemplateBuilder) {
+    public exchangeCompo(RestTemplateBuilder restTemplateBuilder) {
         restTemplate = restTemplateBuilder.build();
     }
 

@@ -2,6 +2,7 @@ package exchange.calcul.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import exchange.calcul.service.exchangeCompo;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,11 +17,11 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
-@RestClientTest(value = ApiConnect.class)
-class ApiConnectTest {
+@RestClientTest(value = exchangeCompo.class)
+class exchangeCompoTest {
 
     @Autowired private MockRestServiceServer mockServer;
-    @Autowired private ApiConnect apiConnect;
+    @Autowired private exchangeCompo exchangeCompo;
     @Autowired private ObjectMapper objectMapper;
 
     @Value("${evn.accessKey}")
@@ -40,7 +41,7 @@ class ApiConnectTest {
             mockServer.expect(requestTo(req_url)).andRespond(withSuccess(expectResult, MediaType.APPLICATION_JSON));
 
             //when
-            HashMap apiMap =  apiConnect.requestCurrencyApi();
+            HashMap apiMap =  exchangeCompo.requestCurrencyApi();
 
             //then
             assertEquals(apiMap.get("success"), mockMap.get("success"));

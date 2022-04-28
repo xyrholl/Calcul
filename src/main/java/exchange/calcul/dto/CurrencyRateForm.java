@@ -4,7 +4,7 @@ import exchange.calcul.domain.CurrencyRate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import static exchange.calcul.util.CurrencyUtil.roundTwo;
+import static exchange.calcul.dto.util.CurrencyUtil.roundTwo;
 
 @Data
 @AllArgsConstructor
