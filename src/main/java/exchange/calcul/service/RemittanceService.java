@@ -30,10 +30,15 @@ public class RemittanceService {
     }
 
     public CurrencyRate findOneCurrencyRate(List<CurrencyRate> crList, CurrencyRateForm currencyRateForm){
-        return crList.stream()
+        List<CurrencyRate> find = crList.stream()
                 .filter(cr -> cr.getBenchCountry().equals(currencyRateForm.getBenchCountry())
                         && cr.getTransCountry().equals(currencyRateForm.getTransCountry())
-                ).collect(Collectors.toList()).get(0);
+                ).collect(Collectors.toList());
+        if(find.size() > 0){
+            return find.get(0);
+        }else{
+            throw new NoSuchElementException("환율 대상국가 정보가 유효하지 않습니다.");
+        }
     }
 
     @Transactional
@@ -42,6 +47,11 @@ public class RemittanceService {
         Remittance newRemittance = Remittance.createRemittance(form, currencyRate);
         remittanceRepository.save(newRemittance);
         return new RemittanceForm(newRemittance);
+    }
+
+    public CurrencyRateForm getRate(String transCountry) {
+        CurrencyRateForm currencyRateForm = new CurrencyRateForm("USD", transCountry);
+        return new CurrencyRateForm(reqCurrencyRate(currencyRateForm));
     }
 
 }

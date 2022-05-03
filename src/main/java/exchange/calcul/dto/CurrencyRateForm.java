@@ -28,5 +28,10 @@ public class CurrencyRateForm {
         this.rate = form.getRate();
     }
 
+    public CurrencyRateForm(String benchCountry, String transCountry) {
+        this.benchCountry = benchCountry.toUpperCase();
+        this.transCountry = transCountry.toUpperCase();
+    }
+
 
 }

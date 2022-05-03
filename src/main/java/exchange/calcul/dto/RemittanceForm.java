@@ -15,6 +15,7 @@ import static exchange.calcul.dto.util.CurrencyUtil.roundTwo;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class RemittanceForm {
 
     @NotEmpty(message = "송금국가가 바르지 않습니다.")
