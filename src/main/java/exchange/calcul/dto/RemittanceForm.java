@@ -4,6 +4,8 @@ import exchange.calcul.domain.CurrencyRate;
 import exchange.calcul.domain.Remittance;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.NotEmpty;

@@ -3,11 +3,13 @@ package exchange.calcul.dto;
 import exchange.calcul.domain.CurrencyRate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import static exchange.calcul.dto.util.CurrencyUtil.roundTwo;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class CurrencyRateForm {
 
     private String benchCountry;

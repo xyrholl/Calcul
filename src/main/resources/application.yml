@@ -1,6 +1,6 @@
 spring:
     datasource:
-        url: jdbc:h2:tcp://localhost/~/Calcul;
+        url: jdbc:h2:mem:calcul;
         username: sa
         password: 1111
         driver-class-name: org.h2.Driver
