@@ -33,7 +33,12 @@ public class MemberRepositoryTest {
         memberRepository.save(member1);
         memberRepository.save(member2);
 
-
+        /**
+         * 영속성 컨텍스트내에서 jpql이 실행될때 flush()가 발생하여
+         *  아래 findAll() 실행시 flush()가 이미 실행되어있는 상태이며,
+         *  db에 직접 commit 하는 시기는 트랙잭션이 종료되고 나서이므로
+         *  flush()와 commit은 다른개념이다.
+         */
         List<Member> members =  memberRepository.findAll();
 
         assertThat(members).extracting("username", "age")
