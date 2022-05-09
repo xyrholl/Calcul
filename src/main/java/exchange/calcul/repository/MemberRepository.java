@@ -2,6 +2,7 @@ package exchange.calcul.repository;
 
 import exchange.calcul.domain.Member;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,4 +16,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     @Query("select m.username from Member m")
     List<String> findUsernameList();
+
+    @Query("select m from Member m where m.username in :names")
+    List<Member> findByNames(@Param("names") Collection<String> names);
 }

@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import exchange.calcul.repository.MemberRepository;
 import exchange.calcul.repository.TeamRepository;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -74,6 +76,21 @@ public class MemberRepositoryTest {
 
         assertThat(usernameList).contains("AAA", "BBB");
 
+    }
+
+    @Test
+    void findUsernames_동작테스트(){
+
+        Member m1 = new Member("AAA", 10, null);
+        Member m2 = new Member("BBB", 11, null);
+
+        memberRepository.save(m1);
+        memberRepository.save(m2);
+
+
+        List<Member> result = memberRepository.findByNames(Arrays.asList("AAA","CCC"));
+
+        assertThat(result.get(0)).isEqualTo(m1);
     }
 
 }
