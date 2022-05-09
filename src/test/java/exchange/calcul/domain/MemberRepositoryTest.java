@@ -47,4 +47,18 @@ public class MemberRepositoryTest {
                 );
     }
 
+    @Test
+    void Query_동작_테스트(){
+
+        Member m1 = new Member("AAA", 10, null);
+        Member m2 = new Member("BBB", 11, null);
+
+        memberRepository.save(m1);
+        memberRepository.save(m2);
+
+        List<Member> result = memberRepository.findUser("AAA", 10);
+
+        assertThat(result.get(0)).isEqualTo(m1);
+    }
+
 }
