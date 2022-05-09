@@ -24,18 +24,18 @@ public class ExchangeRateService {
 
     @Value("${evn.accessKey}")
     private String key;
-    private String req_url = "http://apilayer.net/api/live?currencies=KRW,JPY,PHP,&source=USD&format=1";
+    private String req_url = "http://apilayer.net/api/live?source=USD&format=1";
 
     public HashMap requestCurrencyApi(){
         req_url += "&access_key="+ key;
         return restTemplate.getForObject(req_url, HashMap.class);
     }
 
-    public List<CurrencyRate> currencyRatesExtraction(HashMap hashMapData){
+    public List<CurrencyRate> currencyRatesExtraction(HashMap<String, Object> hashMapData){
 
         List<CurrencyRate> list = new ArrayList<>();
         ObjectMapper objectMapper = new ObjectMapper();
-        Map<String, Object> quotesMap;
+        Map<String, Double> quotesMap;
 
         if(String.valueOf(hashMapData.get("success")).equals("true")) {
             String benchCountry = String.valueOf(hashMapData.get("source"));
@@ -47,7 +47,7 @@ public class ExchangeRateService {
                     CurrencyRate.createCurrencyRate(
                             benchCountry,
                             key.replace(benchCountry, ""),
-                            (Double) value
+                            value
                     ))
             );
 
