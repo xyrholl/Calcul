@@ -61,4 +61,19 @@ public class MemberRepositoryTest {
         assertThat(result.get(0)).isEqualTo(m1);
     }
 
+    @Test
+    void findUsernameList_동작테스트(){
+
+        Member m1 = new Member("AAA", 10, null);
+        Member m2 = new Member("BBB", 11, null);
+
+        memberRepository.save(m1);
+        memberRepository.save(m2);
+
+        List<String> usernameList = memberRepository.findUsernameList();
+
+        assertThat(usernameList).contains("AAA", "BBB");
+
+    }
+
 }
