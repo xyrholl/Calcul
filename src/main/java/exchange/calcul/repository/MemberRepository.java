@@ -1,4 +1,4 @@
-package exchange.calcul.dao.jpa;
+package exchange.calcul.repository;
 
 import exchange.calcul.domain.Member;
 import org.springframework.data.jpa.repository.JpaRepository;

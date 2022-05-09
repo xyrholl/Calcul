@@ -1,9 +1,10 @@
 package exchange.calcul.service;
 
-import exchange.calcul.dao.jpa.CurrencyRateRepository;
-import exchange.calcul.dao.jpa.RemittanceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import exchange.calcul.repository.CurrencyRateRepository;
+import exchange.calcul.repository.RemittanceRepository;
 
 @SpringBootTest
 class DataServiceTest {

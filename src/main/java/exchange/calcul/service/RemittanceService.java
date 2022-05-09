@@ -4,7 +4,7 @@ import exchange.calcul.domain.CurrencyRate;
 import exchange.calcul.domain.Remittance;
 import exchange.calcul.dto.CurrencyRateForm;
 import exchange.calcul.dto.RemittanceForm;
-import exchange.calcul.dao.jpa.RemittanceRepository;
+import exchange.calcul.repository.RemittanceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

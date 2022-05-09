@@ -13,18 +13,33 @@ public class JsonMessage {
 
     private StatusEnum status;
     private String currentTime;
-    private String data;
+    private Object data;
+    private String message;
 
-    public JsonMessage(String format){
+    public JsonMessage(String message, StatusEnum status){
+        this.message = message;
+        this.currentTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'"));
+        this.status = status;
+    }
+
+    public JsonMessage(Object data){
+        this.status = StatusEnum.OK;
+        this.currentTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'"));
+        this.data = data;
+    }
+
+    public JsonMessage(Object data, String format){
         String form = format.toLowerCase();
         if(form.equals("full")){
             this.status = StatusEnum.OK;
             this.currentTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'"));
+            this.data = data;
         }else if(form.equals("short")){
             this.status = StatusEnum.OK;
-        }else{
-            this.status = StatusEnum.BAD_REQUEST;
+            this.data = data;
         }
     }
+
+
     
 }
