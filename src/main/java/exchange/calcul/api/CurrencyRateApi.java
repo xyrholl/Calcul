@@ -16,14 +16,16 @@ public class CurrencyRateApi {
     private final RemittanceService remittanceService;
 
     @GetMapping("/rate/{transCountry}")
-    public ResponseEntity<JsonMessage> getRate(@PathVariable("transCountry") String transCountry){
-        JsonMessage message = new JsonMessage(remittanceService.getRate(transCountry));
+    public ResponseEntity<JsonMessage> getRate(@RequestParam(required = false, defaultValue = "short", value = "format") String format,
+        @PathVariable("transCountry") String transCountry){
+        JsonMessage message = new JsonMessage(remittanceService.getRate(transCountry), format);
         return new ResponseEntity<>(message, HttpStatus.valueOf(message.getStatus().getCode()));
     }
 
     @GetMapping("/test")
-    public ResponseEntity<JsonMessage> healthcheck(@RequestParam("format") String format){
+    public ResponseEntity<JsonMessage> restAPicheck(@RequestParam(required = false, defaultValue = "short", value = "format") String format){
         JsonMessage message = new JsonMessage(null, format);
+        System.out.println(message.toString());
         return new ResponseEntity<>(message, HttpStatus.valueOf(message.getStatus().getCode()));
     }
     

@@ -4,7 +4,6 @@ package exchange.calcul.domain;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.NoSuchElementException;
 
 @Entity
 @Getter @Setter

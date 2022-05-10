@@ -18,8 +18,9 @@ public class RemittanceApi {
     private final RemittanceService remittanceService;
 
     @PostMapping("/currencyRate")
-    public ResponseEntity<JsonMessage> currencyRate(@RequestBody CurrencyRateForm changeCurrency){
-        JsonMessage message = new JsonMessage(remittanceService.reqCurrencyRateForm(changeCurrency));
+    public ResponseEntity<JsonMessage> currencyRate(@RequestParam(required = false, defaultValue = "short", value = "format") String format,
+        @RequestBody CurrencyRateForm changeCurrency){
+        JsonMessage message = new JsonMessage(remittanceService.reqCurrencyRateForm(changeCurrency), format);
         return new ResponseEntity<>(message, HttpStatus.valueOf(message.getStatus().getCode()));
     }
 
