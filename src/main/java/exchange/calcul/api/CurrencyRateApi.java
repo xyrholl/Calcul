@@ -9,7 +9,7 @@ import exchange.calcul.service.RemittanceService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class CurrencyRateApi {
 
@@ -22,10 +22,9 @@ public class CurrencyRateApi {
         return new ResponseEntity<>(message, HttpStatus.valueOf(message.getStatus().getCode()));
     }
 
-    @GetMapping("/test")
-    public ResponseEntity<JsonMessage> restAPicheck(@RequestParam(required = false, defaultValue = "short", value = "format") String format){
+    @GetMapping("/healcheck")
+    public ResponseEntity<JsonMessage> healcheck(@RequestParam(required = false, defaultValue = "short", value = "format") String format){
         JsonMessage message = new JsonMessage(null, format);
-        System.out.println(message.toString());
         return new ResponseEntity<>(message, HttpStatus.valueOf(message.getStatus().getCode()));
     }
     

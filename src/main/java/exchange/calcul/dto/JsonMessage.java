@@ -7,12 +7,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Getter
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @NoArgsConstructor
-@ToString
 public class JsonMessage {
 
     private StatusEnum status;
@@ -21,8 +19,8 @@ public class JsonMessage {
     private String message;
 
     public JsonMessage(String message, StatusEnum status){
-        this.message = message;
         this.currentTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'"));
+        this.message = message;
         this.status = status;
     }
 
