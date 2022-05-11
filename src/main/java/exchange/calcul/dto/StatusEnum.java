@@ -6,9 +6,9 @@ import lombok.Getter;
 public enum StatusEnum {
 
     OK(200, "OK"),
-    METHOD_NOT_ALLOWED(405, "METHOD_NOT_ALLOWED"),
     BAD_REQUEST(400, "BAD_REQUEST"),
     NOT_FOUND(404, "NOT_FOUND"),
+    METHOD_NOT_ALLOWED(405, "METHOD_NOT_ALLOWED"),
     INTERNAL_SERER_ERROR(500, "INTERNAL_SERVER_ERROR");
 
     int statusCode;
