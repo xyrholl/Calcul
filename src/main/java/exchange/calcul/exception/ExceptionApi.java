@@ -35,10 +35,10 @@ public class ExceptionApi {
 
     @ExceptionHandler
     public ResponseEntity<JsonMessage> exceptionHandler(Exception e){
-        log.error("[exceptionHandler] BAD_REQUEST", e);
+        log.error("[exceptionHandler] INTERNAL_SERER_ERROR", e);
         JsonMessage message = new JsonMessage(
             e.getMessage(),
-            StatusEnum.BAD_REQUEST
+            StatusEnum.INTERNAL_SERER_ERROR
         );
         return new ResponseEntity<>(message, HttpStatus.valueOf(message.getStatus().getCode()));
     }

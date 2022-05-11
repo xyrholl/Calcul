@@ -9,20 +9,21 @@ import exchange.calcul.service.RemittanceService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class CurrencyRateApi {
 
     private final RemittanceService remittanceService;
 
     @GetMapping("/rate/{transCountry}")
-    public ResponseEntity<JsonMessage> getRate(@PathVariable("transCountry") String transCountry){
-        JsonMessage message = new JsonMessage(remittanceService.getRate(transCountry));
+    public ResponseEntity<JsonMessage> getRate(@RequestParam(required = false, defaultValue = "short", value = "format") String format,
+        @PathVariable("transCountry") String transCountry){
+        JsonMessage message = new JsonMessage(remittanceService.getRate(transCountry), format);
         return new ResponseEntity<>(message, HttpStatus.valueOf(message.getStatus().getCode()));
     }
 
-    @GetMapping("/test")
-    public ResponseEntity<JsonMessage> healthcheck(@RequestParam("format") String format){
+    @GetMapping("/healcheck")
+    public ResponseEntity<JsonMessage> healcheck(@RequestParam(required = false, defaultValue = "short", value = "format") String format){
         JsonMessage message = new JsonMessage(null, format);
         return new ResponseEntity<>(message, HttpStatus.valueOf(message.getStatus().getCode()));
     }

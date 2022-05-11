@@ -6,9 +6,11 @@ import java.time.format.DateTimeFormatter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@NoArgsConstructor
 public class JsonMessage {
 
     private StatusEnum status;
@@ -17,29 +19,26 @@ public class JsonMessage {
     private String message;
 
     public JsonMessage(String message, StatusEnum status){
+        this.currentTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'"));
         this.message = message;
-        this.currentTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'"));
         this.status = status;
-    }
-
-    public JsonMessage(Object data){
-        this.status = StatusEnum.OK;
-        this.currentTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'"));
-        this.data = data;
     }
 
     public JsonMessage(Object data, String format){
         String form = format.toLowerCase();
-        if(form.equals("full")){
-            this.status = StatusEnum.OK;
-            this.currentTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'"));
-            this.data = data;
-        }else if(form.equals("short")){
-            this.status = StatusEnum.OK;
-            this.data = data;
-        }
+        if(form.equals("full")) shortJsonMessage(data);
+        else if(form.equals("short")) fullJsonMessage(data);
     }
 
+    public void shortJsonMessage(Object data){
+        this.status = StatusEnum.OK;
+        this.data = data;
+    }
 
+    public void fullJsonMessage(Object data){
+        this.currentTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'"));
+        this.status = StatusEnum.OK;
+        this.data = data;
+    }
     
 }
