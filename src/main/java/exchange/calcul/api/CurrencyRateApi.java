@@ -19,13 +19,15 @@ public class CurrencyRateApi {
     public ResponseEntity<JsonMessage> getRate(@RequestParam(required = false, defaultValue = "short", value = "format") String format,
         @PathVariable("transCountry") String transCountry){
         JsonMessage message = new JsonMessage(remittanceService.getRate(transCountry), format);
-        return new ResponseEntity<>(message, HttpStatus.valueOf(message.getStatus().getCode()));
+        return ResponseEntity.status(HttpStatus.valueOf(message.getStatus().getCode()))
+                            .body(message);
     }
 
     @GetMapping("/healcheck")
     public ResponseEntity<JsonMessage> healcheck(@RequestParam(required = false, defaultValue = "short", value = "format") String format){
         JsonMessage message = new JsonMessage(null, format);
-        return new ResponseEntity<>(message, HttpStatus.valueOf(message.getStatus().getCode()));
+        return ResponseEntity.status(HttpStatus.valueOf(message.getStatus().getCode()))
+                            .body(message);
     }
     
 }
