@@ -25,16 +25,26 @@ public class RemittanceService implements CurrencyRateData{
         return apilayer.getCurrencyRates();
     }
 
-    public CurrencyRateForm reqCurrencyRateForm(CurrencyRateForm currencyRateForm){
+    public CurrencyRateForm getRate(String transCountry) {
+        CurrencyRateForm currencyRateForm = new CurrencyRateForm("USD", transCountry);
+        return reqCurrencyRateForm(currencyRateForm);
+    }
+
+    public CurrencyRateForm getRate(CurrencyRateForm changeCurrency) {
+        CurrencyRateForm currencyRateForm = new CurrencyRateForm("USD", changeCurrency.getTransCountry());
+        return reqCurrencyRateForm(currencyRateForm);
+    }
+
+    private CurrencyRateForm reqCurrencyRateForm(CurrencyRateForm currencyRateForm){
         return  new CurrencyRateForm(reqCurrencyRate(currencyRateForm));
     }
 
-    public CurrencyRate reqCurrencyRate(CurrencyRateForm currencyRateForm){
+    private CurrencyRate reqCurrencyRate(CurrencyRateForm currencyRateForm){
         List<CurrencyRate> CurrencyRates = getCurrencyRates();
         return findOneCurrencyRate(CurrencyRates, currencyRateForm);
     }
 
-    public CurrencyRate findOneCurrencyRate(List<CurrencyRate> crList, CurrencyRateForm currencyRateForm){
+    private CurrencyRate findOneCurrencyRate(List<CurrencyRate> crList, CurrencyRateForm currencyRateForm){
         List<CurrencyRate> find = crList.stream()
                 .filter(cr -> cr.getBenchCountry().equals(currencyRateForm.getBenchCountry())
                         && cr.getTransCountry().equals(currencyRateForm.getTransCountry())
@@ -54,9 +64,6 @@ public class RemittanceService implements CurrencyRateData{
         return new RemittanceForm(newRemittance);
     }
 
-    public CurrencyRateForm getRate(String transCountry) {
-        CurrencyRateForm currencyRateForm = new CurrencyRateForm("USD", transCountry);
-        return new CurrencyRateForm(reqCurrencyRate(currencyRateForm));
-    }
+
 
 }
