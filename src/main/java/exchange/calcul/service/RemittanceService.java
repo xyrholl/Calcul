@@ -15,17 +15,22 @@ import java.util.stream.Collectors;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class RemittanceService {
+public class RemittanceService implements CurrencyRateData{
 
     private final RemittanceRepository remittanceRepository;
-    private final ExchangeRateService ExchangeRateService;
+    private final Apilayer apilayer;
+
+    @Override
+    public List<CurrencyRate> getCurrencyRates() {
+        return apilayer.getCurrencyRates();
+    }
 
     public CurrencyRateForm reqCurrencyRateForm(CurrencyRateForm currencyRateForm){
         return  new CurrencyRateForm(reqCurrencyRate(currencyRateForm));
     }
 
     public CurrencyRate reqCurrencyRate(CurrencyRateForm currencyRateForm){
-        List<CurrencyRate> CurrencyRates = ExchangeRateService.currencyRatesExtraction(ExchangeRateService.requestCurrencyApi());
+        List<CurrencyRate> CurrencyRates = getCurrencyRates();
         return findOneCurrencyRate(CurrencyRates, currencyRateForm);
     }
 

@@ -12,7 +12,7 @@ class DataServiceTest {
     @Autowired private CurrencyRateRepository currencyRateRepository;
     @Autowired private RemittanceRepository remittanceRepository;
     @Autowired private RemittanceService remittanceService;
-    @Autowired private ExchangeRateService ExchangeRateService;
+    @Autowired private Apilayer ExchangeRateService;
 
 //    @Test
 //    void api데이터_DB저장데이터_동일() {
