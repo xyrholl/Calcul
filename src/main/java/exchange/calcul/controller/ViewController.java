@@ -1,4 +1,4 @@
-package exchange.calcul.api.controller;
+package exchange.calcul.controller;
 
 import exchange.calcul.dto.CountryForm;
 import org.springframework.stereotype.Controller;

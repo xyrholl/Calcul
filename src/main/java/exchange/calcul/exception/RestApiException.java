@@ -5,15 +5,17 @@ import exchange.calcul.dto.StatusEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.NoSuchElementException;
 
 @Slf4j
-@RestControllerAdvice(basePackages = "exchange.calcul.api")
-public class ExceptionApi {
+@RestControllerAdvice
+public class RestApiException {
 
     @ExceptionHandler
     public ResponseEntity<JsonMessage> noSuchHandler(NoSuchElementException e){
@@ -55,13 +57,32 @@ public class ExceptionApi {
         return ResponseEntity.badRequest().body(message);
     }
 
-    @ExceptionHandler
-    public ResponseEntity<JsonMessage> exceptionHandler(Exception e){
-        log.error("[exceptionHandler] INTERNAL_SERVER_ERROR", e);
+    @ExceptionHandler ResponseEntity<JsonMessage> methodNotHandler(HttpRequestMethodNotSupportedException e){
+        log.info("[exceptionHandler] METHOD_NOT_ALLOWED", e);
         JsonMessage message = new JsonMessage(
-            e.getMessage(),
-            StatusEnum.INTERNAL_SERVER_ERROR
+                e.getMessage(),
+                StatusEnum.METHOD_NOT_ALLOWED
         );
-        return ResponseEntity.internalServerError().body(message);
+        return ResponseEntity.status(405).body(message);
     }
+
+    @ExceptionHandler ResponseEntity<JsonMessage> notFoundHandler(NoHandlerFoundException e){
+        log.info("[exceptionHandler] NOT_FOUND_EXCEPTION", e);
+        JsonMessage message = new JsonMessage(
+                e.getMessage(),
+                StatusEnum.NOT_FOUND
+        );
+        return new ResponseEntity<>(message, HttpStatus.valueOf(message.getStatus().getCode()));
+    }
+
+//    @ExceptionHandler
+//    public ResponseEntity<JsonMessage> exceptionHandler(Exception e){
+//        log.error("[exceptionHandler] INTERNAL_SERVER_ERROR", e);
+//        JsonMessage message = new JsonMessage(
+//            e.getMessage(),
+//            StatusEnum.INTERNAL_SERVER_ERROR
+//        );
+//        return ResponseEntity.internalServerError().body(message);
+//    }
+
 }
