@@ -9,9 +9,21 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.NoSuchElementException;
+
 @Slf4j
 @RestControllerAdvice(basePackages = "exchange.calcul.api")
 public class ExceptionApi {
+
+    @ExceptionHandler
+    public ResponseEntity<JsonMessage> noSuchHandler(NoSuchElementException e){
+        log.error("[exceptionHandler] BAD_REQUEST", e);
+        JsonMessage message = new JsonMessage(
+                e.getMessage(),
+                StatusEnum.BAD_REQUEST
+        );
+        return ResponseEntity.badRequest().body(message);
+    }
 
     @ExceptionHandler
     public ResponseEntity<JsonMessage> validHandler(MethodArgumentNotValidException e){
@@ -20,7 +32,7 @@ public class ExceptionApi {
             e.getBindingResult().getAllErrors().get(0).getDefaultMessage(),
             StatusEnum.BAD_REQUEST
         );
-        return new ResponseEntity<>(message, HttpStatus.valueOf(message.getStatus().getCode()));
+        return ResponseEntity.badRequest().body(message);
     }
 
     @ExceptionHandler
@@ -30,16 +42,26 @@ public class ExceptionApi {
             e.getMessage(),
             StatusEnum.BAD_REQUEST
         );
-        return new ResponseEntity<>(message, HttpStatus.valueOf(message.getStatus().getCode()));
+        return ResponseEntity.badRequest().body(message);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<JsonMessage> apiLayerHandler(ApiLayerException e){
+        log.error("[exceptionHandler] INTERNAL_SERVER_ERROR", e);
+        JsonMessage message = new JsonMessage(
+                e.getMessage(),
+                StatusEnum.INTERNAL_SERVER_ERROR
+        );
+        return ResponseEntity.badRequest().body(message);
     }
 
     @ExceptionHandler
     public ResponseEntity<JsonMessage> exceptionHandler(Exception e){
-        log.error("[exceptionHandler] INTERNAL_SERER_ERROR", e);
+        log.error("[exceptionHandler] INTERNAL_SERVER_ERROR", e);
         JsonMessage message = new JsonMessage(
             e.getMessage(),
-            StatusEnum.INTERNAL_SERER_ERROR
+            StatusEnum.INTERNAL_SERVER_ERROR
         );
-        return new ResponseEntity<>(message, HttpStatus.valueOf(message.getStatus().getCode()));
+        return ResponseEntity.internalServerError().body(message);
     }
 }

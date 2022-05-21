@@ -1,9 +1,12 @@
 package exchange.calcul.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import exchange.calcul.domain.CurrencyRate;
 
+import exchange.calcul.exception.ApiLayerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -29,7 +32,7 @@ public class Apilayer{
 
     public List<CurrencyRate> getCurrencyRates(){
         String currencyRateURL = apiLayerURL();
-        HashMap<String, Object> data = apiCompo.requestApiObject(currencyRateURL);
+        String data = apiCompo.requestApiObject(currencyRateURL);
         return apiLayerExtraction(data);
     }
 
@@ -51,30 +54,38 @@ public class Apilayer{
     }
 
     // apiLayer data 추출
-    private List<CurrencyRate> apiLayerExtraction(HashMap<String, Object> hashMapData){
+    private List<CurrencyRate> apiLayerExtraction(String data){
 
         List<CurrencyRate> list = new ArrayList<>();
         ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, Object> mapData;
         Map<String, Double> quotesMap;
 
-        if(String.valueOf(hashMapData.get("success")).equals("true")) {
-            String benchCountry = String.valueOf(hashMapData.get("source"));
+        try {
+            mapData = objectMapper.readValue(data, new TypeReference<Map<String, Object>>(){});
+            if(String.valueOf(mapData.get("success")).equals("true")) {
+                String benchCountry = String.valueOf(mapData.get("source"));
 
-            quotesMap = objectMapper
-                    .convertValue(hashMapData.get("quotes"), new TypeReference<>(){});
+                quotesMap = objectMapper
+                        .convertValue(mapData.get("quotes"), new TypeReference<>(){});
 
-            quotesMap.forEach((key, value) -> list.add(
-                    CurrencyRate.createCurrencyRate(
-                            benchCountry,
-                            key.replace(benchCountry, ""),
-                            value
-                    ))
-            );
+                quotesMap.forEach((key, value) -> list.add(
+                        CurrencyRate.createCurrencyRate(
+                                benchCountry,
+                                key.replace(benchCountry, ""),
+                                value
+                        ))
+                );
 
-            return list;
-        }else{
-            throw new RuntimeException("apiLayer API 호출에 실패하였습니다.");
+            }else{
+                throw new ApiLayerException(String.valueOf(mapData.get("error")));
+            }
+
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
         }
+
+        return list;
     }
 
 }
