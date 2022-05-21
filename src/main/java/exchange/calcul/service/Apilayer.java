@@ -37,12 +37,12 @@ public class Apilayer{
     private String apiLayerURL(){
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<String,String>();
-        params.add("accesskey", APILAYER_KEY);
+        params.add("access_key", APILAYER_KEY);
         params.add("source", "USD");
         params.add("format", "1");
 
         UriComponents uri =  UriComponentsBuilder.newInstance()
-        .scheme("http").path(APILAYER_LIVE)
+        .scheme("http")
         .host(APILAYER_LIVE)
         .path("/api/live")
         .queryParams(params)
