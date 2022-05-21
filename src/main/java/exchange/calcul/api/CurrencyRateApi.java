@@ -23,8 +23,8 @@ public class CurrencyRateApi {
                             .body(message);
     }
 
-    @GetMapping("/healcheck")
-    public ResponseEntity<JsonMessage> healcheck(@RequestParam(required = false, defaultValue = "short", value = "format") String format){
+    @GetMapping("/healthCheck")
+    public ResponseEntity<JsonMessage> healthCheck(@RequestParam(required = false, defaultValue = "short", value = "format") String format){
         JsonMessage message = new JsonMessage(null, format);
         return ResponseEntity.status(HttpStatus.valueOf(message.getStatus().getCode()))
                             .body(message);
