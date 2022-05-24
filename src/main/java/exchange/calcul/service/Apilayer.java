@@ -9,6 +9,8 @@ import exchange.calcul.domain.CurrencyRate;
 import exchange.calcul.exception.ApiLayerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.json.JsonParser;
+import org.springframework.boot.json.JsonParserFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -31,60 +33,40 @@ public class Apilayer{
     private final String APILAYER_LIVE = "apilayer.net";
 
     public List<CurrencyRate> getCurrencyRates(){
-        String currencyRateURL = apiLayerURL();
-        String data = apiCompo.requestApiObject(currencyRateURL);
-        return apiLayerExtraction(data);
+        String data = apiCompo.requestGet(requestCurrencyRatesAPI());
+        return currencyRateExtraction(data);
     }
 
-    // apiLayer url
-    private String apiLayerURL(){
-
+    private String requestCurrencyRatesAPI(){
         MultiValueMap<String, String> params = new LinkedMultiValueMap<String,String>();
         params.add("access_key", APILAYER_KEY);
         params.add("source", "USD");
         params.add("format", "1");
-
-        UriComponents uri =  UriComponentsBuilder.newInstance()
-        .scheme("http")
-        .host(APILAYER_LIVE)
-        .path("/api/live")
-        .queryParams(params)
-        .build();
-        return uri.toUriString();
+        return apiCompo.buildURI("http", APILAYER_LIVE, "/api/live", params);
     }
 
-    // apiLayer data 추출
-    private List<CurrencyRate> apiLayerExtraction(String data){
-
+    private List<CurrencyRate> currencyRateExtraction(String data){
         List<CurrencyRate> list = new ArrayList<>();
-        ObjectMapper objectMapper = new ObjectMapper();
-        Map<String, Object> mapData;
-        Map<String, Double> quotesMap;
 
-        try {
-            mapData = objectMapper.readValue(data, new TypeReference<Map<String, Object>>(){});
-            if(String.valueOf(mapData.get("success")).equals("true")) {
-                String benchCountry = String.valueOf(mapData.get("source"));
-
-                quotesMap = objectMapper
-                        .convertValue(mapData.get("quotes"), new TypeReference<>(){});
-
-                quotesMap.forEach((key, value) -> list.add(
+        JsonParser jsonParser = JsonParserFactory.getJsonParser();
+        System.out.println(data);
+        Map<String, Object> mapData =  jsonParser.parseMap(data);
+        System.out.println(mapData.toString());
+        if(mapData.get("success").equals(true)) {
+            String benchCountry = mapData.get("source").toString();
+            Map<String, Object> quotesMap = (Map<String, Object>) mapData.get("quotes");
+            quotesMap.forEach((key, value) ->
+                    list.add(
                         CurrencyRate.createCurrencyRate(
                                 benchCountry,
                                 key.replace(benchCountry, ""),
-                                value
-                        ))
-                );
-
-            }else{
-                throw new ApiLayerException(String.valueOf(mapData.get("error")));
-            }
-
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
+                                Double.valueOf(String.valueOf(value))
+                        )
+                    )
+            );
+        }else{
+            throw new ApiLayerException(String.valueOf(mapData.get("error")));
         }
-
         return list;
     }
 
